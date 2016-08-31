@@ -5,22 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 
 public class DWRCGuiHandler {
 
-	private final InventoryCrafting inv;
+	private final ContainerWorkbench container;
 	private final List<ItemStack> cache = new LinkedList<ItemStack>();
 	private final List<IRecipe> matchedRecipes = new ArrayList<IRecipe>();
 	private int cur;
 	private GuiButton prev, next;
 	
-	public DWRCGuiHandler(List<GuiButton> listButton, InventoryCrafting inv) {
-		this.inv = inv;
+	public DWRCGuiHandler(List<GuiButton> listButton, ContainerWorkbench container) {
+		this.container = container;
 		
 		this.prev = new GuiButton(listButton.size(), 0, 0, 20, 20, "<");
 		listButton.add(prev);
@@ -33,8 +32,8 @@ public class DWRCGuiHandler {
 	public void update() {
 		
 		cache.clear();
-		for(int i = 0; i<inv.getSizeInventory(); i++) {
-			cache.add(inv.getStackInSlot(i));
+		for(int i = 0; i<container.craftMatrix.getSizeInventory(); i++) {
+			cache.add(container.craftMatrix.getStackInSlot(i));
 		}
 		
 		updateMatchedRecipes();
@@ -42,28 +41,36 @@ public class DWRCGuiHandler {
 		boolean enableOverlay = matchedRecipes.size() > 1;
 		prev.visible = enableOverlay;
 		next.visible = enableOverlay;
-		cur = enableOverlay ? 0 : -1;
-		onCursorChange();
+		setCursor(0);
 	}
 	
 	private void updateMatchedRecipes() {
 		this.matchedRecipes.clear();
     	for(IRecipe r : CraftingManager.getInstance().getRecipeList()) {
-    		if(r.matches(inv, null)) { //TODO Maybe set a world ?
+    		if(r.matches(container.craftMatrix, null)) { //TODO Maybe set a world ?
     			matchedRecipes.add(r);
     		}
     	}
 	}
 	
 	private void onCursorChange() {
-		if(cur < 0) {
+		
+		if(matchedRecipes.isEmpty()) {
 			cur = -1;
+			return;
+		}
+		
+		if(cur < 0) {
+			cur = 0;
 		}else if(cur >= matchedRecipes.size()){
 			cur = matchedRecipes.size()-1;
 		}
 		
 		prev.enabled = cur != 0;
 		next.enabled = cur != matchedRecipes.size()-1;
+		
+		container.craftResult.setInventorySlotContents(0, matchedRecipes.get(cur).getCraftingResult(container.craftMatrix));
+		
 	}
 	
 	private void setCursor(int cur) {
@@ -80,11 +87,11 @@ public class DWRCGuiHandler {
 	}
 
 	public boolean isDirty() {
-		if(cache.size() != inv.getSizeInventory()) return true;
+		if(cache.size() != container.craftMatrix.getSizeInventory()) return true;
 		
 		int i = 0;
 		for(ItemStack cachedStack : cache) {
-			if(cachedStack != inv.getStackInSlot(i)) {
+			if(cachedStack != container.craftMatrix.getStackInSlot(i)) {
 				return true;
 			}
 			i++;
