@@ -1,0 +1,16 @@
+[
+{
+  "modid": "dealwithrecipescollisions",
+  "name": "Deal with Recipes Collisions",
+  "description": "A solution for recipes collisions",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["RedRelay"],
+  "credits": "RedRelay",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
