@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -49,6 +50,11 @@ public class DWRC
     	proxy.init(evt);
     }
     
+    @EventHandler
+    public void onPostInit(FMLPostInitializationEvent evt) {
+    	proxy.postInit(evt);
+    }
+    
     private void setupTest() {
     	final ItemStack iron = new ItemStack(Items.IRON_INGOT), stick = new ItemStack(Items.STICK);
     	CraftingManager.getInstance().addRecipe(new ShapedRecipes(3, 3, new ItemStack[]{iron, iron, iron, null, stick, null, null, stick, null}, iron));
@@ -64,13 +70,8 @@ public class DWRC
     }
     
     @SideOnly(Side.CLIENT)
-    public static Configuration getConfig() {
-    	return ((ClientProxy)proxy).getConfig();
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public static void onConfigChanged() {
-    	((ClientProxy)proxy).onConfigChanged();
+    public static ClientProxy getClientProxy() {
+    	return (ClientProxy) proxy;
     }
     
     

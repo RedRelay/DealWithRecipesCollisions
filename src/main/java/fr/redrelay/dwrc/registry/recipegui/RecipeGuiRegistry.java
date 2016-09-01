@@ -38,4 +38,10 @@ public class RecipeGuiRegistry {
 		}
 	}
 	
+	public void sortProps(Configuration config) {
+		for(int i = 0; i<providers.size(); i++) {
+			providers.get(i).sortProps(config);
+		}
+	}
+	
 }

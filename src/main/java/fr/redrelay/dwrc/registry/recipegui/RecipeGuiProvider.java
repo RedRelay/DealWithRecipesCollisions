@@ -26,5 +26,10 @@ public abstract class RecipeGuiProvider implements IRecipeGuiProvider {
 	public void onConfigChanged(Configuration config) {
 		this.builder.onConfigChanged(config);
 	}
+	
+	@Override
+	public void sortProps(Configuration config) {
+		builder.sortProps(config);
+	}
 
 }

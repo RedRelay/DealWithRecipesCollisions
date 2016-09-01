@@ -14,4 +14,5 @@ public interface IRecipeGuiProvider {
 	public boolean accept(GuiContainer gui);
 	public IRecipeGui getRecipeGui(GuiContainer gui, List<GuiButton> listButton);
 	public void onConfigChanged(Configuration config);
+	public void sortProps(Configuration config);
 }

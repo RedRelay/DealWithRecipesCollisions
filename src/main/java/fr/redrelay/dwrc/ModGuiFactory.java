@@ -44,7 +44,7 @@ public class ModGuiFactory implements IModGuiFactory{
 		}
 
 		private static List<IConfigElement> getConfigElements() {
-			Configuration config = DWRC.getConfig();
+			Configuration config = DWRC.getClientProxy().getConfig();
 			List<IConfigElement> elements = new LinkedList<IConfigElement>();
 			for(String category : config.getCategoryNames()) {
 				final ConfigElement e = new ConfigElement(config.getCategory(category));
@@ -55,10 +55,10 @@ public class ModGuiFactory implements IModGuiFactory{
 		
 		@Override
 		public void onGuiClosed() {
-			Configuration config = DWRC.getConfig();
+			Configuration config = DWRC.getClientProxy().getConfig();
 			if(config.hasChanged()) {
-				DWRC.onConfigChanged();
-				config.save();
+				DWRC.getClientProxy().onConfigChanged();
+				DWRC.getClientProxy().saveConfig();
 			}
 			super.onGuiClosed();
 		}
