@@ -7,7 +7,10 @@ import fr.redrelay.dwrc.DWRC;
 import fr.redrelay.dwrc.gui.IRecipeGui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RecipeGuiRegistry {
 
 	private final List<IRecipeGuiProvider> providers = new LinkedList<IRecipeGuiProvider>();

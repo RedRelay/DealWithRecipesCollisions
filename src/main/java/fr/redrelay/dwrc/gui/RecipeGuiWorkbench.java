@@ -8,7 +8,10 @@ import org.lwjgl.util.Dimension;
 import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RecipeGuiWorkbench extends RecipeGui {
 
 	

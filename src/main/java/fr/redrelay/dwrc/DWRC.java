@@ -3,6 +3,7 @@ package fr.redrelay.dwrc;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import fr.redrelay.dwrc.proxy.CommonProxy;
 import fr.redrelay.dwrc.registry.recipefinder.RecipeFinderRegistry;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +19,10 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = DWRC.MODID, version = DWRC.VERSION)
 public class DWRC
@@ -38,9 +41,14 @@ public class DWRC
     private static SimpleNetworkWrapper channel;
     
     @EventHandler
+    public void preInit(FMLPreInitializationEvent evt) {
+    	channel = NetworkRegistry.INSTANCE.newSimpleChannel("DWRC");
+    	channel.registerMessage(new CraftingResultPacket.CraftingResultPacketHandler(), CraftingResultPacket.class, 0, Side.SERVER);
+    }
+    
+    @EventHandler
     public void onInit(FMLInitializationEvent evt) {
     	setupTest();
-    	channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
     	proxy.init(evt);
     }
     

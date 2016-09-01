@@ -13,7 +13,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public abstract class RecipeModel implements IRecipeModel{
 
 	private final List<IRecipeModelListener> listeners = new ArrayList<IRecipeModelListener>();
