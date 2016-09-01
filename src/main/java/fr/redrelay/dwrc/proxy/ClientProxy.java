@@ -1,6 +1,8 @@
 package fr.redrelay.dwrc.proxy;
 
-import fr.redrelay.dwrc.gui.DWRCGuiHandler;
+import fr.redrelay.dwrc.gui.RecipeGui;
+import fr.redrelay.dwrc.gui.RecipeGuiWorkbench;
+import fr.redrelay.dwrc.model.RecipeModelWorkbench;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.inventory.ContainerWorkbench;
@@ -10,7 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxy extends CommonProxy {
 
-	private DWRCGuiHandler handler;
+	private RecipeGui handler;
 	
 	@Override
 	public void registerHandlers() {
@@ -21,7 +23,7 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
 		if(evt.getGui() instanceof GuiCrafting) {
-			handler = new DWRCGuiHandler((GuiContainer) evt.getGui(), evt.getButtonList(), ((ContainerWorkbench)((GuiCrafting) evt.getGui()).inventorySlots));
+			handler = new RecipeGuiWorkbench((GuiContainer) evt.getGui(), evt.getButtonList(), new RecipeModelWorkbench((ContainerWorkbench)((GuiCrafting) evt.getGui()).inventorySlots));
 		}else {
 			handler = null;
 		}
@@ -36,8 +38,8 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public void onDrawScreenPre(GuiScreenEvent.DrawScreenEvent.Pre evt) {
 		if(handler == null) return;
-		if(handler.isDirty()) {
-			handler.update();
+		if(handler.getModel().isDirty()) {
+			handler.getModel().update();;
 		}
 	}
 	

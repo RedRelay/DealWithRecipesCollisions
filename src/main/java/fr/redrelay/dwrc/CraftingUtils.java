@@ -14,8 +14,6 @@ public class CraftingUtils {
 	}
 	
 	public static void getMatchedRecipes(List<IRecipe> matchedRecipes, ContainerWorkbench container) {
-		matchedRecipes.clear();
-		
 		World world = ReflectionHelper.getPrivateValue(ContainerWorkbench.class, container, "field_75161_g", "worldObj");
 		
 		for(IRecipe r : CraftingManager.getInstance().getRecipeList()) {
