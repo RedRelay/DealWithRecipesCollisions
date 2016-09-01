@@ -1,5 +1,6 @@
 package fr.redrelay.dwrc.proxy;
 
+import fr.redrelay.dwrc.Config;
 import fr.redrelay.dwrc.recipeguiprovider.RecipeGuiProviderPlayer;
 import fr.redrelay.dwrc.recipeguiprovider.RecipeGuiProviderWorkbench;
 import fr.redrelay.dwrc.registry.recipegui.RecipeGuiRegistry;
@@ -7,7 +8,6 @@ import fr.redrelay.dwrc.registry.recipegui.gui.IRecipeGui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -18,16 +18,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
+	private Config config;
+	
 	private final RecipeGuiRegistry recipeGuiRegistry = new RecipeGuiRegistry();
-	private Configuration config;
 
 	private IRecipeGui handler;
 
 	@Override
 	public void preInit(FMLPreInitializationEvent evt) {
 		super.preInit(evt);
-		config = new Configuration(evt.getSuggestedConfigurationFile());
-		config.load();
+		config = new Config(evt.getSuggestedConfigurationFile());
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit(FMLPostInitializationEvent evt) {
 		super.postInit(evt);
-		recipeGuiRegistry.onConfigChanged(config);
-		saveConfig();
+		config.onConfigChanged();
+		config.saveConfig();
 	}
 
 	private void registerRecipeGuis() {
@@ -83,18 +83,11 @@ public class ClientProxy extends CommonProxy {
 		handler.drawOverlay(evt.getGui());
 	}
 
-	public Configuration getConfig() {
+	public RecipeGuiRegistry getRecipeGuiRegistry() {
+		return recipeGuiRegistry;
+	}
+	
+	public Config getConfig() {
 		return config;
-	}
-
-	public void onConfigChanged() {
-		recipeGuiRegistry.onConfigChanged(config);
-	}
-
-	public void saveConfig() {
-		if(config.hasChanged()) {
-			recipeGuiRegistry.sortProps(config);
-			config.save();
-		}
 	}
 }
