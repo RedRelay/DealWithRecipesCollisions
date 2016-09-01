@@ -1,5 +1,6 @@
-package fr.redrelay.dwrc.registry.recipegui;
+package fr.redrelay.dwrc.registry.recipegui.gui;
 
+import fr.redrelay.dwrc.registry.recipegui.model.IRecipeModel;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;

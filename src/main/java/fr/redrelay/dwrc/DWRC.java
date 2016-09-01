@@ -1,12 +1,14 @@
 package fr.redrelay.dwrc;
 
 import fr.redrelay.dwrc.packet.CraftingResultPacket;
+import fr.redrelay.dwrc.proxy.ClientProxy;
 import fr.redrelay.dwrc.proxy.CommonProxy;
 import fr.redrelay.dwrc.registry.recipecontainer.RecipeContainerRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -16,8 +18,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = DWRC.MODID, version = DWRC.VERSION)
+@Mod(modid = DWRC.MODID, version = DWRC.VERSION, guiFactory="fr.redrelay.dwrc.ModGuiFactory")
 public class DWRC
 {
     
@@ -37,6 +40,7 @@ public class DWRC
     public void preInit(FMLPreInitializationEvent evt) {
     	channel = NetworkRegistry.INSTANCE.newSimpleChannel("DWRC");
     	channel.registerMessage(new CraftingResultPacket.CraftingResultPacketHandler(), CraftingResultPacket.class, 0, Side.SERVER);
+    	proxy.preInit(evt);
     }
     
     @EventHandler
@@ -57,6 +61,16 @@ public class DWRC
     
     public static RecipeContainerRegistry getRecipeContainerRegistry() {
     	return proxy.getRecipeContainerRegistry();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static Configuration getConfig() {
+    	return ((ClientProxy)proxy).getConfig();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static void onConfigChanged() {
+    	((ClientProxy)proxy).onConfigChanged();
     }
     
     

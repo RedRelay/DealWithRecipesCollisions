@@ -3,8 +3,10 @@ package fr.redrelay.dwrc.registry.recipegui;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.redrelay.dwrc.registry.recipegui.gui.IRecipeGui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,6 +30,12 @@ public class RecipeGuiRegistry {
 	
 	public List<IRecipeGuiProvider> getProviders() {
 		return providers;
+	}
+	
+	public void onConfigChanged(Configuration config) {
+		for(IRecipeGuiProvider provider : providers) {
+			provider.onConfigChanged(config);
+		}
 	}
 	
 }

@@ -1,4 +1,4 @@
-package fr.redrelay.dwrc.registry.recipegui;
+package fr.redrelay.dwrc.registry.recipegui.model;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

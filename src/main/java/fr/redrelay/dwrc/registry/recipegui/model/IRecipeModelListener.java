@@ -1,4 +1,4 @@
-package fr.redrelay.dwrc.registry.recipegui;
+package fr.redrelay.dwrc.registry.recipegui.model;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
