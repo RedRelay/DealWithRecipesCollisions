@@ -42,6 +42,7 @@ public class DWRC
     	channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
     	proxy.registerChannels();
     	proxy.registerHandlers();
+    	proxy.registerRecipeGuiModelProviders();
     }
     
     private void setupTest() {
