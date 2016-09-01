@@ -1,5 +1,6 @@
 package fr.redrelay.dwrc.proxy;
 
+import fr.redrelay.dwrc.finders.RecipeFinderPlayer;
 import fr.redrelay.dwrc.finders.RecipeFinderWorkbench;
 import fr.redrelay.dwrc.registry.recipefinder.RecipeFinderRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -15,6 +16,7 @@ public class CommonProxy {
 	
 	private void registerRecipeFinders() {
 		recipeFinderRegistry.register(new RecipeFinderWorkbench());
+		recipeFinderRegistry.register(new RecipeFinderPlayer());
 	}
 	
 	protected void registerHandlers() {
