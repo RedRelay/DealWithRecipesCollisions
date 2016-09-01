@@ -1,4 +1,4 @@
-package fr.redrelay.dwrc.gui;
+package fr.redrelay.dwrc.registry.recipegui;
 
 import fr.redrelay.dwrc.model.IRecipeModel;
 import net.minecraft.client.gui.GuiButton;

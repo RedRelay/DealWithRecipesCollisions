@@ -6,18 +6,17 @@ import java.util.List;
 
 import fr.redrelay.dwrc.CraftingUtils;
 import fr.redrelay.dwrc.DWRC;
+import fr.redrelay.dwrc.exceptions.NoRecipeFinderFoundException;
 import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class RecipeModel implements IRecipeModel{
+public class RecipeModel implements IRecipeModel{
 
 	private final List<IRecipeModelListener> listeners = new ArrayList<IRecipeModelListener>();
 	
@@ -26,21 +25,27 @@ public abstract class RecipeModel implements IRecipeModel{
 	private int cur;
 	
 	private final IRecipeFinder finder;
+	private final Container container;
 	
-	public RecipeModel(IRecipeFinder finder) {
-		this.finder = finder;
+	public RecipeModel(Container container) {
+		this.container = container;
+		this.finder = DWRC.getRecipeFinderRegistry().findRecipeFinder(container);
+		
+		if(this.finder == null) {
+			throw new NoRecipeFinderFoundException(container);
+		}
 	}
 	
 	@Override
 	public void update() {
 		cache.clear();
-		for(int i = 0; i<getInputInventory().getSizeInventory(); i++) {
-			cache.add(getInputInventory().getStackInSlot(i));
+		for(int i = 0; i<finder.getInventoryCrafting(container).getSizeInventory(); i++) {
+			cache.add(finder.getInventoryCrafting(container).getStackInSlot(i));
 		}
 		
 		
 		matchedRecipes.clear();
-		CraftingUtils.getMatchedRecipes(matchedRecipes, finder.getInventoryCrafting(getContainer()), finder.getWorld(getContainer()));
+		CraftingUtils.getMatchedRecipes(matchedRecipes, finder.getInventoryCrafting(container), finder.getWorld(container));
 		
 		setCursor(0);
 		
@@ -62,8 +67,8 @@ public abstract class RecipeModel implements IRecipeModel{
 			cur = matchedRecipes.size()-1;
 		}
 		
-		DWRC.getChannel().sendToServer(new CraftingResultPacket(matchedRecipes.get(cur).getCraftingResult(getInputInventory())));
-		getOutputInventory().setInventorySlotContents(0, matchedRecipes.get(cur).getCraftingResult(getInputInventory()));
+		DWRC.getChannel().sendToServer(new CraftingResultPacket(matchedRecipes.get(cur).getCraftingResult(finder.getInventoryCrafting(container))));
+		finder.getResultInventory(container).setInventorySlotContents(0, matchedRecipes.get(cur).getCraftingResult(finder.getInventoryCrafting(container)));
 		
 		for(int i=0; i<listeners.size(); i++) {
 			listeners.get(i).onCursorChange();
@@ -72,11 +77,11 @@ public abstract class RecipeModel implements IRecipeModel{
 	
 	@Override
 	public boolean isDirty() {
-		if(cache.size() != getInputInventory().getSizeInventory()) return true;
+		if(cache.size() != finder.getInventoryCrafting(container).getSizeInventory()) return true;
 		
 		int i = 0;
 		for(ItemStack cachedStack : cache) {
-			if(cachedStack != getInputInventory().getStackInSlot(i)) {
+			if(cachedStack != finder.getInventoryCrafting(container).getStackInSlot(i)) {
 				return true;
 			}
 			i++;
@@ -115,8 +120,4 @@ public abstract class RecipeModel implements IRecipeModel{
 	public void removeListener(IRecipeModelListener listener) {
 		this.listeners.remove(listener);
 	}
-
-	protected abstract InventoryCrafting getInputInventory();
-	protected abstract IInventory getOutputInventory();
-	protected abstract Container getContainer(); 
 }

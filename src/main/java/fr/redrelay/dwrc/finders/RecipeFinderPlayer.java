@@ -1,11 +1,10 @@
 package fr.redrelay.dwrc.finders;
 
-import fr.redrelay.dwrc.model.IRecipeModel;
-import fr.redrelay.dwrc.model.RecipeModelPlayer;
 import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -28,8 +27,8 @@ public class RecipeFinderPlayer implements IRecipeFinder {
 	}
 
 	@Override
-	public IRecipeModel getModel(Container container) {
-		return new RecipeModelPlayer(this, (ContainerPlayer) container);
+	public IInventory getResultInventory(Container container) {
+		return ((ContainerPlayer)container).craftResult;
 	}
 
 }

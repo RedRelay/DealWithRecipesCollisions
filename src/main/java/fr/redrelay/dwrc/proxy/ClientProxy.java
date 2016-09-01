@@ -1,8 +1,8 @@
 package fr.redrelay.dwrc.proxy;
 
-import fr.redrelay.dwrc.gui.IRecipeGui;
-import fr.redrelay.dwrc.model.provider.ProviderPlayer;
-import fr.redrelay.dwrc.model.provider.ProviderWorkbench;
+import fr.redrelay.dwrc.provider.ProviderPlayer;
+import fr.redrelay.dwrc.provider.ProviderWorkbench;
+import fr.redrelay.dwrc.registry.recipegui.IRecipeGui;
 import fr.redrelay.dwrc.registry.recipegui.RecipeGuiRegistry;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraftforge.client.event.GuiScreenEvent;

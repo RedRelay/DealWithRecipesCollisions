@@ -1,21 +1,12 @@
 package fr.redrelay.dwrc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import fr.redrelay.dwrc.proxy.CommonProxy;
 import fr.redrelay.dwrc.registry.recipefinder.RecipeFinderRegistry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
