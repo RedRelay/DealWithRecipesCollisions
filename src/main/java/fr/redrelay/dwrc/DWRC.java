@@ -2,7 +2,7 @@ package fr.redrelay.dwrc;
 
 import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import fr.redrelay.dwrc.proxy.CommonProxy;
-import fr.redrelay.dwrc.registry.recipefinder.RecipeFinderRegistry;
+import fr.redrelay.dwrc.registry.recipecontainer.RecipeContainerRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -55,8 +55,8 @@ public class DWRC
 		return channel;
 	}
     
-    public static RecipeFinderRegistry getRecipeFinderRegistry() {
-    	return proxy.getRecipeFinderRegistry();
+    public static RecipeContainerRegistry getRecipeContainerRegistry() {
+    	return proxy.getRecipeContainerRegistry();
     }
     
     

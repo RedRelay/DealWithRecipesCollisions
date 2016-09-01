@@ -1,4 +1,4 @@
-package fr.redrelay.dwrc.provider;
+package fr.redrelay.dwrc.recipeguiprovider;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ProviderWorkbench implements IRecipeGuiProvider {
+public class RecipeGuiProviderWorkbench implements IRecipeGuiProvider {
 
 	@Override
 	public boolean accept(GuiContainer gui) {

@@ -2,9 +2,6 @@ package fr.redrelay.dwrc.registry.recipegui;
 
 import java.util.List;
 
-import fr.redrelay.dwrc.model.IRecipeModel;
-import fr.redrelay.dwrc.model.IRecipeModelListener;
-import fr.redrelay.dwrc.model.RecipeModel;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;

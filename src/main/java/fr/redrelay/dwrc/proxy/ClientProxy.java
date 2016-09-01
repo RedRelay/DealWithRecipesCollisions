@@ -1,7 +1,7 @@
 package fr.redrelay.dwrc.proxy;
 
-import fr.redrelay.dwrc.provider.ProviderPlayer;
-import fr.redrelay.dwrc.provider.ProviderWorkbench;
+import fr.redrelay.dwrc.recipeguiprovider.RecipeGuiProviderPlayer;
+import fr.redrelay.dwrc.recipeguiprovider.RecipeGuiProviderWorkbench;
 import fr.redrelay.dwrc.registry.recipegui.IRecipeGui;
 import fr.redrelay.dwrc.registry.recipegui.RecipeGuiRegistry;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -26,8 +26,8 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	private void registerRecipeGuis() {
-		recipeGuiRegistry.register(new ProviderWorkbench());
-		recipeGuiRegistry.register(new ProviderPlayer());
+		recipeGuiRegistry.register(new RecipeGuiProviderWorkbench());
+		recipeGuiRegistry.register(new RecipeGuiProviderPlayer());
 	}
 	
 	@Override

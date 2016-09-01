@@ -1,6 +1,6 @@
-package fr.redrelay.dwrc.finders;
+package fr.redrelay.dwrc.recipecontainer;
 
-import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
+import fr.redrelay.dwrc.registry.recipecontainer.IRecipeContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
@@ -8,7 +8,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-public class RecipeFinderWorkbench implements IRecipeFinder{
+public class RecipeContainerWorkbench implements IRecipeContainer{
 
 	@Override
 	public boolean accept(Container container) {

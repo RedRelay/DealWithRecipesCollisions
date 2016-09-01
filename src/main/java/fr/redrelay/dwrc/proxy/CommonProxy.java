@@ -1,28 +1,28 @@
 package fr.redrelay.dwrc.proxy;
 
-import fr.redrelay.dwrc.finders.RecipeFinderPlayer;
-import fr.redrelay.dwrc.finders.RecipeFinderWorkbench;
-import fr.redrelay.dwrc.registry.recipefinder.RecipeFinderRegistry;
+import fr.redrelay.dwrc.recipecontainer.RecipeContainerPlayer;
+import fr.redrelay.dwrc.recipecontainer.RecipeContainerWorkbench;
+import fr.redrelay.dwrc.registry.recipecontainer.RecipeContainerRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 public class CommonProxy {
 
-	protected final RecipeFinderRegistry recipeFinderRegistry = new RecipeFinderRegistry();
+	protected final RecipeContainerRegistry recipeContainerRegistry = new RecipeContainerRegistry();
 	
 	public void init(FMLInitializationEvent evt) {
 		this.registerHandlers();
-		this.registerRecipeFinders();
+		this.registerRecipeContainers();
 	}
 	
-	private void registerRecipeFinders() {
-		recipeFinderRegistry.register(new RecipeFinderWorkbench());
-		recipeFinderRegistry.register(new RecipeFinderPlayer());
+	private void registerRecipeContainers() {
+		recipeContainerRegistry.register(new RecipeContainerWorkbench());
+		recipeContainerRegistry.register(new RecipeContainerPlayer());
 	}
 	
 	protected void registerHandlers() {
 	}
 	
-	public RecipeFinderRegistry getRecipeFinderRegistry() {
-		return recipeFinderRegistry;
+	public RecipeContainerRegistry getRecipeContainerRegistry() {
+		return recipeContainerRegistry;
 	}
 }

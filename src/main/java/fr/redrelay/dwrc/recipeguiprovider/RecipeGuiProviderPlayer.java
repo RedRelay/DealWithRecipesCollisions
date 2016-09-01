@@ -1,4 +1,4 @@
-package fr.redrelay.dwrc.provider;
+package fr.redrelay.dwrc.recipeguiprovider;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 
-public class ProviderPlayer implements IRecipeGuiProvider {
+public class RecipeGuiProviderPlayer implements IRecipeGuiProvider {
 
 	@Override
 	public boolean accept(GuiContainer gui) {
