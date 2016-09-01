@@ -8,9 +8,12 @@ import fr.redrelay.dwrc.CraftingUtils;
 import fr.redrelay.dwrc.DWRC;
 import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class DWRCGuiHandler {
 
@@ -18,16 +21,24 @@ public class DWRCGuiHandler {
 	private final List<ItemStack> cache = new LinkedList<ItemStack>();
 	private final List<IRecipe> matchedRecipes = new ArrayList<IRecipe>();
 	private int cur;
+	
+	private String label;
 	private GuiButton prev, next;
 	
-	public DWRCGuiHandler(List<GuiButton> listButton, ContainerWorkbench container) {
+	private final int xOffset;
+	private final int yOffset;
+	
+	public DWRCGuiHandler(GuiContainer gui, List<GuiButton> listButton, ContainerWorkbench container) {
 		this.container = container;
 		
-		this.prev = new GuiButton(listButton.size(), 0, 0, 20, 20, "<");
+		xOffset = (gui.width-((Integer)ReflectionHelper.getPrivateValue(GuiContainer.class, gui, "field_146999_f", "xSize")))/2;
+		yOffset = (gui.height-((Integer)ReflectionHelper.getPrivateValue(GuiContainer.class, gui, "field_147000_g", "ySize")))/2;
+		
+		this.prev = new GuiButton(listButton.size(), xOffset+96, yOffset+59, 20, 20, "<");
 		listButton.add(prev);
-		this.next = new GuiButton(listButton.size(), 20, 0, 20, 20, ">");
+		this.next = new GuiButton(listButton.size(), xOffset+148, yOffset+59, 20, 20, ">");
 		listButton.add(next);
-
+		
 		this.update();
 	}
 	
@@ -48,7 +59,7 @@ public class DWRCGuiHandler {
 	
 	private void onCursorChange() {
 		
-		if(matchedRecipes.isEmpty()) {
+		if(matchedRecipes.size() < 2) {
 			cur = -1;
 			return;
 		}
@@ -61,6 +72,8 @@ public class DWRCGuiHandler {
 		
 		prev.enabled = cur != 0;
 		next.enabled = cur != matchedRecipes.size()-1;
+		
+		label = (cur+1) + "/" + matchedRecipes.size();
 		
 		DWRC.getChannel().sendToServer(new CraftingResultPacket(matchedRecipes.get(cur).getCraftingResult(container.craftMatrix)));
 		container.craftResult.setInventorySlotContents(0, matchedRecipes.get(cur).getCraftingResult(container.craftMatrix));
@@ -91,6 +104,12 @@ public class DWRCGuiHandler {
 		}
 		
 		return false;
+	}
+
+	public void drawOverlay(GuiScreen gui) {
+		if(cur == -1) return;
+		gui.mc.fontRendererObj.drawString(label, xOffset+124, yOffset+64, 4210752);
+		
 	}
 
 	

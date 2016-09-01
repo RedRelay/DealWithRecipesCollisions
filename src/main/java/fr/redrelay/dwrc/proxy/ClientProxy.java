@@ -1,6 +1,7 @@
 package fr.redrelay.dwrc.proxy;
 
 import fr.redrelay.dwrc.gui.DWRCGuiHandler;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -20,7 +21,7 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
 		if(evt.getGui() instanceof GuiCrafting) {
-			handler = new DWRCGuiHandler(evt.getButtonList(), ((ContainerWorkbench)((GuiCrafting) evt.getGui()).inventorySlots));
+			handler = new DWRCGuiHandler((GuiContainer) evt.getGui(), evt.getButtonList(), ((ContainerWorkbench)((GuiCrafting) evt.getGui()).inventorySlots));
 		}else {
 			handler = null;
 		}
@@ -33,10 +34,16 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	@SubscribeEvent
-	public void onDrawScreen(GuiScreenEvent.DrawScreenEvent.Pre evt) {
+	public void onDrawScreenPre(GuiScreenEvent.DrawScreenEvent.Pre evt) {
 		if(handler == null) return;
 		if(handler.isDirty()) {
 			handler.update();
 		}
+	}
+	
+	@SubscribeEvent
+	public void onDrawScreenPost(GuiScreenEvent.DrawScreenEvent.Post evt) {
+		if(handler == null) return;
+		handler.drawOverlay(evt.getGui());
 	}
 }
