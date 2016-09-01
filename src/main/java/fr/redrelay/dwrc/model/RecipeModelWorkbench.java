@@ -1,6 +1,6 @@
 package fr.redrelay.dwrc.model;
 
-import fr.redrelay.dwrc.CraftingUtils;
+import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -9,7 +9,8 @@ public class RecipeModelWorkbench extends RecipeModel{
 
 	private final ContainerWorkbench container;
 	
-	public RecipeModelWorkbench(ContainerWorkbench container) {
+	public RecipeModelWorkbench(IRecipeFinder finder, ContainerWorkbench container) {
+		super(finder);
 		this.container = container;
 	}
 	
@@ -24,8 +25,8 @@ public class RecipeModelWorkbench extends RecipeModel{
 	}
 
 	@Override
-	protected void updateMatchedRecipes() {
-		CraftingUtils.getMatchedRecipes(matchedRecipes, container);
+	protected ContainerWorkbench getContainer() {
+		return container;
 	}
 
 }

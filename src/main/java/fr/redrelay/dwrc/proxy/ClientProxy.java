@@ -1,14 +1,29 @@
 package fr.redrelay.dwrc.proxy;
 
 import fr.redrelay.dwrc.gui.IRecipeGui;
+import fr.redrelay.dwrc.model.provider.ProviderWorkbench;
+import fr.redrelay.dwrc.registry.recipegui.RecipeGuiRegistry;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxy extends CommonProxy {
 
+	private final RecipeGuiRegistry recipeGuiRegistry = new RecipeGuiRegistry();
+	
 	private IRecipeGui handler;
+	
+	@Override
+	public void init(FMLInitializationEvent evt) {
+		super.init(evt);
+		this.registerRecipeGuis();
+	}
+	
+	private void registerRecipeGuis() {
+		recipeGuiRegistry.register(new ProviderWorkbench());
+	}
 	
 	@Override
 	public void registerHandlers() {
@@ -19,7 +34,7 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
 		if(evt.getGui() instanceof GuiContainer) {
-			handler = registry.findRecipeGui((GuiContainer) evt.getGui(), evt.getButtonList());
+			handler = recipeGuiRegistry.findRecipeGui((GuiContainer) evt.getGui(), evt.getButtonList());
 		}
 	}
 	

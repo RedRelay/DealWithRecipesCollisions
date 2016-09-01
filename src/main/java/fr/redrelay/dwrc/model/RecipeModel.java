@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.redrelay.dwrc.CraftingUtils;
 import fr.redrelay.dwrc.DWRC;
 import fr.redrelay.dwrc.packet.CraftingResultPacket;
+import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -19,6 +22,12 @@ public abstract class RecipeModel implements IRecipeModel{
 	protected final List<IRecipe> matchedRecipes = new ArrayList<IRecipe>();
 	private int cur;
 	
+	private final IRecipeFinder finder;
+	
+	public RecipeModel(IRecipeFinder finder) {
+		this.finder = finder;
+	}
+	
 	@Override
 	public void update() {
 		cache.clear();
@@ -26,8 +35,10 @@ public abstract class RecipeModel implements IRecipeModel{
 			cache.add(getInputInventory().getStackInSlot(i));
 		}
 		
+		
 		matchedRecipes.clear();
-		updateMatchedRecipes();
+		CraftingUtils.getMatchedRecipes(matchedRecipes, finder.getInventoryCrafting(getContainer()), finder.getWorld(getContainer()));
+		
 		setCursor(0);
 		
 		for(int i=0; i<listeners.size(); i++) {
@@ -104,6 +115,5 @@ public abstract class RecipeModel implements IRecipeModel{
 
 	protected abstract InventoryCrafting getInputInventory();
 	protected abstract IInventory getOutputInventory();
-	protected abstract void updateMatchedRecipes();
-	
+	protected abstract Container getContainer(); 
 }

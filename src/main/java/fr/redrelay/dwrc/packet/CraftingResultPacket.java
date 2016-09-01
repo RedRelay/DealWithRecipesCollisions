@@ -4,9 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fr.redrelay.dwrc.CraftingUtils;
+import fr.redrelay.dwrc.DWRC;
+import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -45,20 +46,22 @@ public class CraftingResultPacket implements IMessage {
 		@Override
 		public IMessage onMessage(CraftingResultPacket message, MessageContext ctx) {
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
-			if(player.openContainer instanceof ContainerWorkbench) {
-				ContainerWorkbench container = (ContainerWorkbench) player.openContainer;
+			
+			IRecipeFinder finder = DWRC.getRecipeFinderRegistry().findRecipeFinder(player.openContainer);
+			
+			if(finder != null) {
 				
 				//Cheat verifications
 				final List<IRecipe> matchedRecipes = new LinkedList<IRecipe>();
-				CraftingUtils.getMatchedRecipes(matchedRecipes, container);
+				CraftingUtils.getMatchedRecipes(matchedRecipes, finder.getInventoryCrafting(player.openContainer), finder.getWorld(player.openContainer));
 				if(matchedRecipes.size() < 2) {
 					return null;
 				}
 				
 				for(IRecipe recipe : matchedRecipes) {
-					final ItemStack trustedCraftingResult = recipe.getCraftingResult(container.craftMatrix);
+					final ItemStack trustedCraftingResult = recipe.getCraftingResult(finder.getInventoryCrafting(player.openContainer));
 					if(ItemStack.areItemStacksEqual(trustedCraftingResult, message.craftingResult)) {
-						container.putStackInSlot(0, message.craftingResult);
+						player.openContainer.putStackInSlot(0, message.craftingResult);
 						return null;
 					}
 				}

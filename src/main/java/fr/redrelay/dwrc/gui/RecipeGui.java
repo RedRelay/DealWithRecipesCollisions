@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.lwjgl.util.Dimension;
 
+import fr.redrelay.dwrc.exceptions.NoRecipeFinderFoundException;
 import fr.redrelay.dwrc.model.IRecipeModel;
 import fr.redrelay.dwrc.model.IRecipeModelListener;
+import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -22,9 +24,13 @@ public abstract class RecipeGui implements IRecipeGui, IRecipeModelListener{
 	private final int yOffset;
 	private final Dimension labelLoc;
 	
-	public RecipeGui(GuiContainer gui, List<GuiButton> listButton, IRecipeModel model) {
+	public RecipeGui(GuiContainer gui, List<GuiButton> listButton, IRecipeFinder finder) {
 		
-		this.model = model;
+		if(finder == null) {
+			throw new NoRecipeFinderFoundException(gui.inventorySlots);
+		}
+		
+		this.model = finder.getModel(gui.inventorySlots);
 		this.model.addListener(this);
 		
 		xOffset = (gui.width-((Integer)ReflectionHelper.getPrivateValue(GuiContainer.class, gui, "field_146999_f", "xSize")))/2;

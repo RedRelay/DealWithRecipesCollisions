@@ -3,15 +3,15 @@ package fr.redrelay.dwrc.model.provider;
 import java.util.List;
 
 import fr.redrelay.dwrc.gui.RecipeGuiWorkbench;
-import fr.redrelay.dwrc.model.RecipeModelWorkbench;
-import fr.redrelay.dwrc.registry.IRecipeGuiModelProvider;
+import fr.redrelay.dwrc.registry.recipefinder.IRecipeFinder;
+import fr.redrelay.dwrc.registry.recipegui.IRecipeGuiProvider;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerWorkbench;
 
-public class ProviderWorkbench implements IRecipeGuiModelProvider {
+public class ProviderWorkbench implements IRecipeGuiProvider {
 
 	@Override
 	public boolean accept(GuiContainer gui) {
@@ -23,12 +23,8 @@ public class ProviderWorkbench implements IRecipeGuiModelProvider {
 	}
 
 	@Override
-	public RecipeGuiWorkbench getRecipeGui(GuiContainer gui, List<GuiButton> listButton) {
-		return new RecipeGuiWorkbench(gui, listButton, this.getRecipeModel(gui.inventorySlots));
-	}
-	
-	public RecipeModelWorkbench getRecipeModel(Container container) {
-		return new RecipeModelWorkbench((ContainerWorkbench) container);
+	public RecipeGuiWorkbench getRecipeGui(GuiContainer gui, List<GuiButton> listButton, IRecipeFinder finder) {
+		return new RecipeGuiWorkbench(gui, listButton, finder);
 	}
 
 }

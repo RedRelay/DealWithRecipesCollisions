@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.redrelay.dwrc.proxy.CommonProxy;
+import fr.redrelay.dwrc.registry.recipefinder.RecipeFinderRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -40,9 +41,7 @@ public class DWRC
     public void onInit(FMLInitializationEvent evt) {
     	setupTest();
     	channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-    	proxy.registerChannels();
-    	proxy.registerHandlers();
-    	proxy.registerRecipeGuiModelProviders();
+    	proxy.init(evt);
     }
     
     private void setupTest() {
@@ -78,6 +77,10 @@ public class DWRC
     public static SimpleNetworkWrapper getChannel() {
 		return channel;
 	}
+    
+    public static RecipeFinderRegistry getRecipeFinderRegistry() {
+    	return proxy.getRecipeFinderRegistry();
+    }
     
     
     
