@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.redrelay.dwrc.CraftingUtils;
+import fr.redrelay.dwrc.DWRC;
+import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 
 public class DWRCGuiHandler {
@@ -36,21 +38,12 @@ public class DWRCGuiHandler {
 			cache.add(container.craftMatrix.getStackInSlot(i));
 		}
 		
-		updateMatchedRecipes();
+		CraftingUtils.getMatchedRecipes(matchedRecipes, container);
 		
 		boolean enableOverlay = matchedRecipes.size() > 1;
 		prev.visible = enableOverlay;
 		next.visible = enableOverlay;
 		setCursor(0);
-	}
-	
-	private void updateMatchedRecipes() {
-		this.matchedRecipes.clear();
-    	for(IRecipe r : CraftingManager.getInstance().getRecipeList()) {
-    		if(r.matches(container.craftMatrix, null)) { //TODO Maybe set a world ?
-    			matchedRecipes.add(r);
-    		}
-    	}
 	}
 	
 	private void onCursorChange() {
@@ -69,8 +62,8 @@ public class DWRCGuiHandler {
 		prev.enabled = cur != 0;
 		next.enabled = cur != matchedRecipes.size()-1;
 		
+		DWRC.getChannel().sendToServer(new CraftingResultPacket(matchedRecipes.get(cur).getCraftingResult(container.craftMatrix)));
 		container.craftResult.setInventorySlotContents(0, matchedRecipes.get(cur).getCraftingResult(container.craftMatrix));
-		
 	}
 	
 	private void setCursor(int cur) {

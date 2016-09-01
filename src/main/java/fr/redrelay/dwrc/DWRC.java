@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 @Mod(modid = DWRC.MODID, version = DWRC.VERSION)
 public class DWRC
@@ -32,9 +34,13 @@ public class DWRC
     @Instance(DWRC.MODID)
 	public static DWRC instance;
     
+    private static SimpleNetworkWrapper channel;
+    
     @EventHandler
     public void onInit(FMLInitializationEvent evt) {
     	setupTest();
+    	channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+    	proxy.registerChannels();
     	proxy.registerHandlers();
     }
     
@@ -68,6 +74,9 @@ public class DWRC
     	
     }
     
+    public static SimpleNetworkWrapper getChannel() {
+		return channel;
+	}
     
     
     
