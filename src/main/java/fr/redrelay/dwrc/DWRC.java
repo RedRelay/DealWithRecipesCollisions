@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod(modid = DWRC.MODID, version = DWRC.VERSION, guiFactory="fr.redrelay.dwrc.ModGuiFactory")
+@Mod(modid = DWRC.MODID, version = DWRC.VERSION, guiFactory="fr.redrelay.dwrc.ModGuiFactory", acceptableRemoteVersions = "*")
 public class DWRC
 {
     
