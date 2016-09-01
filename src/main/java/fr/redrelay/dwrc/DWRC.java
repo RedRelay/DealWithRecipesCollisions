@@ -4,10 +4,6 @@ import fr.redrelay.dwrc.packet.CraftingResultPacket;
 import fr.redrelay.dwrc.proxy.ClientProxy;
 import fr.redrelay.dwrc.proxy.CommonProxy;
 import fr.redrelay.dwrc.registry.recipecontainer.RecipeContainerRegistry;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -45,19 +41,12 @@ public class DWRC
     
     @EventHandler
     public void onInit(FMLInitializationEvent evt) {
-    	setupTest();
     	proxy.init(evt);
     }
     
     @EventHandler
     public void onPostInit(FMLPostInitializationEvent evt) {
     	proxy.postInit(evt);
-    }
-    
-    private void setupTest() {
-    	final ItemStack iron = new ItemStack(Items.IRON_INGOT), stick = new ItemStack(Items.STICK);
-    	CraftingManager.getInstance().addRecipe(new ShapedRecipes(3, 3, new ItemStack[]{iron, iron, iron, null, stick, null, null, stick, null}, iron));
-    	CraftingManager.getInstance().addRecipe(iron, new Object[] {"X", "#", 'X', Items.COAL, '#', Items.STICK});
     }
     
     public static SimpleNetworkWrapper getChannel() {
