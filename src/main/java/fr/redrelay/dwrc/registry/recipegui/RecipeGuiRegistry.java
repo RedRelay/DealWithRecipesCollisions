@@ -1,6 +1,6 @@
 package fr.redrelay.dwrc.registry.recipegui;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.redrelay.dwrc.registry.recipegui.gui.IRecipeGui;
@@ -13,16 +13,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RecipeGuiRegistry {
 
-	private final List<IRecipeGuiProvider> providers = new LinkedList<IRecipeGuiProvider>();
+	private final List<IRecipeGuiProvider> providers = new ArrayList<IRecipeGuiProvider>();
 	
 	public void register(IRecipeGuiProvider provider) {
 		providers.add(provider);
 	}
 	
 	public IRecipeGui findRecipeGui(GuiContainer gui, List<GuiButton> listButton) {
-		for(IRecipeGuiProvider provider : providers) {
-			if(provider.accept(gui)) {
-				return provider.getRecipeGui(gui, listButton);
+		for(int i = 0; i<providers.size(); i++) {
+			if(providers.get(i).accept(gui)) {
+				return providers.get(i).getRecipeGui(gui, listButton);
 			}
 		}
 		return null;
@@ -33,8 +33,8 @@ public class RecipeGuiRegistry {
 	}
 	
 	public void onConfigChanged(Configuration config) {
-		for(IRecipeGuiProvider provider : providers) {
-			provider.onConfigChanged(config);
+		for(int i = 0; i<providers.size(); i++) {
+			providers.get(i).onConfigChanged(config);
 		}
 	}
 	
