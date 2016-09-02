@@ -7,7 +7,6 @@ import fr.redrelay.dwrc.registry.recipegui.RecipeGuiRegistry;
 import fr.redrelay.dwrc.registry.recipegui.gui.IRecipeGui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -46,12 +45,6 @@ public class ClientProxy extends CommonProxy {
 	private void registerRecipeGuis() {
 		recipeGuiRegistry.register(new RecipeGuiProviderWorkbench());
 		recipeGuiRegistry.register(new RecipeGuiProviderPlayer());
-	}
-
-	@Override
-	public void registerHandlers() {
-		super.registerHandlers();
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@SubscribeEvent
