@@ -63,14 +63,6 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SubscribeEvent
-	public void onDrawScreenPre(GuiScreenEvent.DrawScreenEvent.Pre evt) {
-		if(handler == null) return;
-		if(handler.getModel().isDirty()) {
-			handler.getModel().update();;
-		}
-	}
-
-	@SubscribeEvent
 	public void onDrawScreenPost(GuiScreenEvent.DrawScreenEvent.Post evt) {
 		if(handler == null) return;
 		handler.drawOverlay(evt.getGui());
@@ -82,5 +74,9 @@ public class ClientProxy extends CommonProxy {
 	
 	public Config getConfig() {
 		return config;
+	}
+	
+	public IRecipeGui getHandler() {
+		return handler;
 	}
 }

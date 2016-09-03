@@ -1,6 +1,7 @@
 package fr.redrelay.dwrc;
 
-import fr.redrelay.dwrc.packet.CraftingResultPacket;
+import fr.redrelay.dwrc.packet.RecipeCursorPacket;
+import fr.redrelay.dwrc.packet.RecipeNbPacket;
 import fr.redrelay.dwrc.proxy.ClientProxy;
 import fr.redrelay.dwrc.proxy.CommonProxy;
 import fr.redrelay.dwrc.registry.recipecontainer.RecipeContainerRegistry;
@@ -35,7 +36,9 @@ public class DWRC
     @EventHandler
     public void preInit(FMLPreInitializationEvent evt) {
     	channel = NetworkRegistry.INSTANCE.newSimpleChannel("DWRC");
-    	channel.registerMessage(new CraftingResultPacket.CraftingResultPacketHandler(), CraftingResultPacket.class, 0, Side.SERVER);
+    	channel.registerMessage(new RecipeNbPacket.RecipeNbPacketClientHandler(), RecipeNbPacket.class, 0, Side.CLIENT);
+    	channel.registerMessage(new RecipeCursorPacket.RecipeCursorPacketClientHandler(), RecipeCursorPacket.class, 1, Side.CLIENT);
+    	channel.registerMessage(new RecipeCursorPacket.RecipeCursorPacketServerHandler(), RecipeCursorPacket.class, 2, Side.SERVER);
     	proxy.preInit(evt);
     }
     

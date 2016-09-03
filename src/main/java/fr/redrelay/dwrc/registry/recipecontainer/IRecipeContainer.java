@@ -10,4 +10,5 @@ public interface IRecipeContainer {
 	public InventoryCrafting getInventoryCrafting(Container container);
 	public IInventory getResultInventory(Container container);
 	public World getWorld(Container container);
+	public int getSlotCraftingIndex();
 }

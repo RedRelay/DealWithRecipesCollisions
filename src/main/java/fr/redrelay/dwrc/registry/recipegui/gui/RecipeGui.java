@@ -2,10 +2,9 @@ package fr.redrelay.dwrc.registry.recipegui.gui;
 
 import java.util.List;
 
+import fr.redrelay.dwrc.DWRC;
+import fr.redrelay.dwrc.packet.RecipeCursorPacket;
 import fr.redrelay.dwrc.registry.recipegui.builder.IRecipeGuiBuilder;
-import fr.redrelay.dwrc.registry.recipegui.model.IRecipeModel;
-import fr.redrelay.dwrc.registry.recipegui.model.IRecipeModelListener;
-import fr.redrelay.dwrc.registry.recipegui.model.RecipeModel;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -14,10 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RecipeGui implements IRecipeGui, IRecipeModelListener{
+public class RecipeGui implements IRecipeGui {
 
-	private final IRecipeModel model;
-	
 	private String label;
 	private GuiButton prev, next;
 	
@@ -26,13 +23,14 @@ public class RecipeGui implements IRecipeGui, IRecipeModelListener{
 	
 	private final int xLabel, yLabel;
 	
+	private int recipeNb;
+	private int cur;
+	
 	public RecipeGui(GuiContainer gui, List<GuiButton> listButton, IRecipeGuiBuilder builder) {
 		this(gui, listButton, builder, listButton.size(), listButton.size()+1);
 	}
 	
 	public RecipeGui(GuiContainer gui, List<GuiButton> listButton, IRecipeGuiBuilder builder, int idPrev, int idNext) {
-		this.model = new RecipeModel(gui.inventorySlots);
-		this.model.addListener(this);
 		
 		xOffset = (gui.width-((Integer)ReflectionHelper.getPrivateValue(GuiContainer.class, gui, "field_146999_f", "xSize")))/2;
 		yOffset = (gui.height-((Integer)ReflectionHelper.getPrivateValue(GuiContainer.class, gui, "field_147000_g", "ySize")))/2;
@@ -46,41 +44,48 @@ public class RecipeGui implements IRecipeGui, IRecipeModelListener{
 		this.xLabel = builder.getXLabel();
 		this.yLabel = builder.getYLabel();
 		
-		this.onUpdate();
-		this.onCursorChange();
+		this.setRecipeNb(0);
 	}
 	
 	@Override
-	public IRecipeModel getModel() {
-		return model;
+	public void setCursor(int cur) {
+			this.cur = cur;
+			prev.enabled = cur != 0;
+			next.enabled = cur != recipeNb-1;
+			label = (cur+1) + "/" + recipeNb;
 	}
-	
+
 	@Override
-	public void onUpdate() {
-		boolean enableOverlay = model.isOverlayEnabled();
+	public void setRecipeNb(int recipeNb) {
+		this.recipeNb = recipeNb;
+		this.setCursor(0);
+		
+		boolean enableOverlay = isOverlayEnabled();
 		prev.visible = enableOverlay;
 		next.visible = enableOverlay;
 	}
 	
 	@Override
-	public void onCursorChange() {
-		prev.enabled = model.getCursor() != 0;
-		next.enabled = model.getCursor() != model.getNbRecipes()-1;
-		label = (model.getCursor()+1) + "/" + model.getNbRecipes();
+	public boolean isOverlayEnabled() {
+		return recipeNb > 1;
+	}
+	
+	private void askForCursor(int cur) {
+		DWRC.getChannel().sendToServer(new RecipeCursorPacket(cur));
 	}
 	
 	@Override
 	public void onActionPerformed(GuiButton button) {
 		if(button == prev) {
-			model.setCursor(model.getCursor()-1);
+			askForCursor(cur-1);
 		}else if(button == next) {
-			model.setCursor(model.getCursor()+1);
+			askForCursor(cur+1);
 		}
 	}
 
 	@Override
 	public void drawOverlay(GuiScreen gui) {
-		if(model.isOverlayEnabled()) {
+		if(isOverlayEnabled()) {
 			gui.mc.fontRendererObj.drawString(label, xOffset+xLabel, yOffset+yLabel, 4210752);
 		}
 	}

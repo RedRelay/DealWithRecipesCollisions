@@ -30,4 +30,9 @@ public class RecipeContainerWorkbench implements IRecipeContainer{
 		return ((ContainerWorkbench)container).craftResult;
 	}
 
+	@Override
+	public int getSlotCraftingIndex() {
+		return 0;
+	}
+
 }

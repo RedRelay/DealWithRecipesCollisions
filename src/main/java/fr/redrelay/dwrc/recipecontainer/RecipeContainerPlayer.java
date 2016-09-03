@@ -31,4 +31,11 @@ public class RecipeContainerPlayer implements IRecipeContainer {
 		return ((ContainerPlayer)container).craftResult;
 	}
 
+	@Override
+	public int getSlotCraftingIndex() {
+		return 0;
+	}
+
+
+
 }

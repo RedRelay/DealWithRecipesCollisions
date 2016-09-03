@@ -1,11 +1,12 @@
 package fr.redrelay.dwrc.proxy;
 
 import fr.redrelay.dwrc.DWRC;
-import fr.redrelay.dwrc.capabilities.CraftingResultCapability;
+import fr.redrelay.dwrc.capabilities.MultipleRecipeCapability;
 import fr.redrelay.dwrc.recipecontainer.RecipeContainerPlayer;
 import fr.redrelay.dwrc.recipecontainer.RecipeContainerWorkbench;
 import fr.redrelay.dwrc.registry.recipecontainer.RecipeContainerRegistry;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,7 +19,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class CommonProxy {
 
@@ -46,7 +46,7 @@ public class CommonProxy {
 	}
 	
 	private void registerCapabilities() {
-		CraftingResultCapability.register();
+		MultipleRecipeCapability.register();
 	}
 	
 	public RecipeContainerRegistry getRecipeContainerRegistry() {
@@ -56,43 +56,43 @@ public class CommonProxy {
 	@SubscribeEvent
 	public void onAttachEntityCapabilities(AttachCapabilitiesEvent.Entity evt) {
 		if(!evt.getEntity().getEntityWorld().isRemote && evt.getEntity() instanceof EntityPlayer) {
-			evt.addCapability(new ResourceLocation(DWRC.MODID, PlayerCapabilityProvider.KEY), new PlayerCapabilityProvider((EntityPlayer) evt.getEntity()));
+			evt.addCapability(new ResourceLocation(DWRC.MODID, PlayerCapabilityProvider.KEY), new PlayerCapabilityProvider((EntityPlayerMP) evt.getEntity()));
 		}
 	}
 	
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone evt) {
 		if(!evt.getEntityPlayer().getEntityWorld().isRemote && evt.isWasDeath()) {
-			evt.getEntityPlayer().getCapability(CraftingResultCapability.CAPABILITY, null).copyFrom(evt.getOriginal().getCapability(CraftingResultCapability.CAPABILITY, null));
+			evt.getEntityPlayer().getCapability(MultipleRecipeCapability.CAPABILITY, null).copyFrom(evt.getOriginal().getCapability(MultipleRecipeCapability.CAPABILITY, null));
+		}
+	}
+	
+	@SubscribeEvent
+	public void onContainerOpenned(PlayerContainerEvent.Open evt) {
+		if(!evt.getEntityPlayer().getEntityWorld().isRemote) {
+			evt.getEntityPlayer().getCapability(MultipleRecipeCapability.CAPABILITY, null).onContainerOpenned();
 		}
 	}
 	
 	@SubscribeEvent
 	public void onPlayerContainerClosed(PlayerContainerEvent.Close evt) {
 		if(!evt.getEntityPlayer().getEntityWorld().isRemote) {
-			evt.getEntityPlayer().getCapability(CraftingResultCapability.CAPABILITY, null).onContainerClosed();
-		}
-	}
-	
-	@SubscribeEvent
-	public void onCrafting(ItemCraftedEvent evt) {
-		if(!evt.player.getEntityWorld().isRemote) {
-			evt.player.getCapability(CraftingResultCapability.CAPABILITY, null).updateCraftingSlot();
+			evt.getEntityPlayer().getCapability(MultipleRecipeCapability.CAPABILITY, null).onContainerClosed();
 		}
 	}
 	
 	public static class PlayerCapabilityProvider implements ICapabilityProvider {
 
 		public static final String KEY = "PlayerCapabilities";
-		private final CraftingResultCapability data;
+		private final MultipleRecipeCapability data;
 		
-		public PlayerCapabilityProvider(EntityPlayer player) {
-			data = new CraftingResultCapability(player);
+		public PlayerCapabilityProvider(EntityPlayerMP player) {
+			data = new MultipleRecipeCapability(player);
 		}
 		
 		@Override
 		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-			return capability == CraftingResultCapability.CAPABILITY;
+			return capability == MultipleRecipeCapability.CAPABILITY;
 		}
 
 		@Override
@@ -101,4 +101,6 @@ public class CommonProxy {
 		}
 		
 	}
+	
+
 }
